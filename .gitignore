@@ -1,0 +1,4 @@
+.vagrant
+django-todo
+fab.log
+.~lock*
