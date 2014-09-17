@@ -2,3 +2,4 @@
 django-todo
 fab.log
 .~lock*
+.idea

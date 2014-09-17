@@ -1,7 +1,13 @@
 from __future__ import print_function
-from fabric.api import run, task, hide, settings
+from fabric.api import run, task, hide, settings, env
 from fabric.colors import green, red
 import logging
+
+
+env.user = 'vagrant'
+env.password = 'vagrant'
+env.port = 2222
+env.host_string = 'localhost'
 
 
 logging.basicConfig(
@@ -25,12 +31,11 @@ def test(cmd, expect_contains, error_msg=None):
         if expect_contains in out:
             log.info('{} {}'.format(expect_contains, green('OK')))
             return True
-        else: 
-            log.error('{} {} {}'.format(
-                red("FAIL!! "), 
-                out, 
-                error_msg or " expected: {}".format(expect_contains)))
-            return False
+        log.error('{} {} {}'.format(
+            red("FAIL!! "),
+            out,
+            error_msg or " expected: {}".format(expect_contains)))
+        return False
 
 
 @task
@@ -38,4 +43,3 @@ def check():
     with hide('everything'):
         test('python --version', '2.7.3')
         test('uname', 'Linux')
-
