@@ -69,7 +69,6 @@ def run_ok(cmd):
 def system_install():
     sudo("apt-get update")
     sudo("apt-get install git gettext")
-    sudo("apt-get install uwsgi")
     sudo('wget https://bootstrap.pypa.io/ez_setup.py -O - | python')
     sudo('wget https://bootstrap.pypa.io/get-pip.py -O - | python')
     sudo('pip install -I virtualenvwrapper')
@@ -100,7 +99,6 @@ def system_check():
         ok &= test_version('pip --version', version_regex, '1.5')
         ok &= test_version('gettext --version', version_regex, '0.15')
         ok &= test_version('nginx -v', version_regex, '1.1')
-        ok &= test_version('uwsgi --version', version_regex, '1.0')
     return ok
 
 
@@ -155,12 +153,7 @@ def deploy(git_ref="master", git_url="https://github.com/julienaubert/gothpy_dja
         run('cp {} .'.format(django_settings))
         run('django-admin.py collectstatic --noinput')
         run('django-admin.py syncdb --noinput')
-
-
         run('django-admin.py runserver 8000')
-
-        # wsgi_file = '$VIRTUAL_ENV/lib/python2.7/site-packages/gothpy_django_ex/wsgi.py'
-        # run('cp {} .'.format(wsgi_file))
 
 @task
 def startapp():
@@ -168,6 +161,3 @@ def startapp():
         run('django-admin.py runserver 8000')
 
 
-    # put('uwsgi.ini', '~/uwsgi.ini')
-    # with prefix('workon gothpy_django'):
-    #     run('uwsgi --ini ~/uwsgi.ini')
